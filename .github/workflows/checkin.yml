@@ -1,0 +1,30 @@
+name: Ikuuu Auto Checkin
+
+on:
+  schedule:
+    - cron: '0 1 * * *'
+  workflow_dispatch:
+
+jobs:
+  checkin:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+
+      - name: Install dependencies
+        run: pip install requests
+
+      - name: Run checkin
+        env:
+          COOKIE_UID: ${{ secrets.COOKIE_UID }}
+          COOKIE_EMAIL: ${{ secrets.COOKIE_EMAIL }}
+          COOKIE_KEY: ${{ secrets.COOKIE_KEY }}
+          COOKIE_IP: ${{ secrets.COOKIE_IP }}
+          COOKIE_EXPIRE: ${{ secrets.COOKIE_EXPIRE }}
+        run: python checkin.py
