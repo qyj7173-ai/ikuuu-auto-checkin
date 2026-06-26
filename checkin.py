@@ -2,16 +2,13 @@ import os
 import requests
 import json
 from datetime import datetime, timezone
-
 def checkin():
     cookie_uid = os.environ.get('COOKIE_UID')
     cookie_email = os.environ.get('COOKIE_EMAIL')
     cookie_key = os.environ.get('COOKIE_KEY')
     cookie_ip = os.environ.get('COOKIE_IP')
     cookie_expire = os.environ.get('COOKIE_EXPIRE')
-
     cookie = f"uid={cookie_uid}; email={cookie_email}; key={cookie_key}; ip={cookie_ip}; expire_in={cookie_expire}"
-
     headers = {
         'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36',
         'Accept': 'application/json, text/javascript, */*; q=0.01',
@@ -22,15 +19,12 @@ def checkin():
         'Cookie': cookie,
         'Content-Length': '0',
     }
-
     now = datetime.now(timezone.utc).strftime('%Y-%m-%d %H:%M:%S UTC')
     print(f"[{now}] Starting ikuuu checkin...")
-
     try:
         resp = requests.post('https://ikuuu.win/user/checkin', headers=headers, timeout=30)
         print(f"Status: {resp.status_code}")
         print(f"Response: {resp.text}")
-
         try:
             data = resp.json()
             print(f"Result: {data}")
@@ -44,10 +38,8 @@ def checkin():
                 print(f"Checkin failed: {data}")
         except json.JSONDecodeError:
             print("Response is not JSON")
-
     except requests.exceptions.RequestException as e:
         print(f"Request failed: {e}")
         raise
-
 if __name__ == '__main__':
     checkin()
