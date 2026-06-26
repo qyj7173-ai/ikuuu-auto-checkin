@@ -33,10 +33,15 @@ def checkin():
 
         try:
             data = resp.json()
-            if data.get('success'):
-                print(f"Checkin successful! Got {data.get('data', {}).get('traffic', 'unknown')} traffic")
+            print(f"Result: {data}")
+            if data.get('ret') == 0:
+                msg = data.get('msg', '')
+                if '已签到' in msg or '签到过' in msg:
+                    print("Already checked in today")
+                else:
+                    print(f"Checkin successful! {msg}")
             else:
-                print(f"Checkin result: {data.get('message', 'unknown')}")
+                print(f"Checkin failed: {data}")
         except json.JSONDecodeError:
             print("Response is not JSON")
 
